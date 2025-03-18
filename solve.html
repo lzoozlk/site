@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <script>
+    while (true) {
+      var aStr = prompt("请输入系数a（不为0）");
+      var a = parseFloat(aStr);
+      if (!isNaN(a) && a!== 0) {
+        break;
+      } else {
+        alert("输入的a无效，请输入非零数字！");
+      }
+    }
+
+    while (true) {
+      var bStr = prompt("请输入系数b");
+      var b = parseFloat(bStr);
+      if (!isNaN(b)) {
+        break;
+      } else {
+        alert("输入的b无效，请输入数字！");
+      }
+    }
+
+    while (true) {
+      var cStr = prompt("请输入系数c");
+      var c = parseFloat(cStr);
+      if (!isNaN(c)) {
+        break;
+      } else {
+        alert("输入的c无效，请输入数字！");
+      }
+    }
+
+    var delta = b * b - 4 * a * c;
+
+    if (delta < 0) {
+      alert("该二次方程无实数解");
+      console.log("该二次方程无实数解");
+    } else {
+
+      var x1 = (-b + Math.sqrt(delta)) / (2 * a);
+      var x2 = (-b - Math.sqrt(delta)) / (2 * a);
+
+      alert("方程的解为x1 = " + x1 + "，x2 = " + x2);
+
+      console.log("方程的解为x1 = " + x1 + "，x2 = " + x2);
+    }
+  </script>
+</body>
+
+</html>
