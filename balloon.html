@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { margin: 0; background: white; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <canvas id="c"></canvas>
+    <script>
+        const C = {
+            count: 10,
+            rad: 15,
+            speed: { min: 0.8, max: 1.8 }, 
+            scale: { min: 0.6, max: 1.6 },
+            hue: 0.4  
+        };
+        let cnv = document.getElementById('c');
+        let ctx = cnv.getContext('2d');
+        let balloons = [];
+        function resize() {
+            cnv.width = window.innerWidth;
+            cnv.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+        class Balloon {
+            constructor() {
+                this.reset();
+                this.resize = Math.random()*0.008+0.004;  
+                this.dir = Math.random() > 0.5 ? 1 : -1;
+            }
+            reset() {
+                this.x = Math.random()*cnv.width;
+                this.y = cnv.height + 100;
+                this.s = Math.random()*(C.speed.max-C.speed.min)+C.speed.min;
+                this.scale = 1;
+                this.hue = Math.random()*360;
+                this.active = true;
+            }
+            update() {
+                if(!this.active) return;
+                this.y -= this.s;
+                this.scale += this.resize;
+                if (this.scale > C.scale.max || this.scale < C.scale.min) {
+                    this.resize *= -1;
+                }
+                this.hue = (this.hue + C.hue * this.dir) % 360;
+                if(this.y < -50) this.active = false;
+            }
+            draw() {
+                if(!this.active) return;
+                let r = C.rad * this.scale;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, r, 0, Math.PI*2);
+                ctx.fillStyle = `hsl(${this.hue},90%,60%)`;
+                ctx.fill();
+            }
+        }
+        function gen() {
+            balloons = Array(C.count).fill().map(() => new Balloon());
+        }
+        function animate() {
+            ctx.clearRect(0, 0, cnv.width, cnv.height);
+            
+            balloons.forEach(b => {
+                b.update();
+                b.draw();
+            });
+            if(balloons.every(b => !b.active)) gen();
+            
+            requestAnimationFrame(animate);
+        }
+
+        gen();
+        animate();
+    </script>
+</body>
+</html>
